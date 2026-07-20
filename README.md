@@ -1,6 +1,6 @@
 # ABELLAB Enterprise Infrastructure Lab
 
-ABELLAB is a self-directed infrastructure project that recreates a small enterprise environment on one physical host. The project goes beyond installation screenshots: it includes deployed configuration, repeatable health checks, controlled failure tests, a verified restore drill, and an incident record describing a failed backup attempt and its resolution.
+ABELLAB is a self-directed infrastructure project that recreates a small enterprise environment on a single VMware ESXi host. The project goes beyond installation screenshots: it includes deployed configuration, repeatable health checks, controlled failure tests, a verified restore drill, and an incident record describing a failed backup attempt and its resolution.
 
 > This is an isolated home lab. It contains synthetic identities, RFC 1918 addresses, evaluation software, and no patient data, PHI, employer systems, or production workloads.
 
@@ -22,15 +22,18 @@ All systems run as virtual machines on a single VMware ESXi 8.0.3 host. The diag
 
 ```mermaid
 flowchart LR
-    DC["LAB-DC01 · 192.168.2.53<br/>Windows Server 2025<br/>AD DS, DNS, Group Policy"]
-    FS["LAB-FS01 · 192.168.2.54<br/>Windows Server 2025<br/>SMB, FSRM, Server Backup"]
-    CL["LAB-CL01 · 192.168.2.55<br/>Windows 11 Pro<br/>Domain workstation"]
-    LN["LAB-LNX01 · 192.168.2.56<br/>Ubuntu Server 24.04<br/>SSSD, Docker, monitoring"]
+    subgraph ESXI["VMware ESXi 8.0.3 virtualization platform"]
+        direction LR
+        DC["LAB-DC01 · 192.168.2.53<br/>Windows Server 2025<br/>AD DS, DNS, Group Policy"]
+        FS["LAB-FS01 · 192.168.2.54<br/>Windows Server 2025<br/>SMB, FSRM, Server Backup"]
+        CL["LAB-CL01 · 192.168.2.55<br/>Windows 11 Pro<br/>Domain workstation"]
+        LN["LAB-LNX01 · 192.168.2.56<br/>Ubuntu Server 24.04<br/>SSSD, Docker, monitoring"]
 
-    DC -->|"Identity and DNS"| FS
-    DC -->|"Authentication and policy"| CL
-    DC -->|"Kerberos and SSSD"| LN
-    FS -->|"Department shares"| CL
+        DC -->|"Identity and DNS"| FS
+        DC -->|"Authentication and policy"| CL
+        DC -->|"Kerberos and SSSD"| LN
+        FS -->|"Department shares"| CL
+    end
 ```
 
 ### Monitoring flow

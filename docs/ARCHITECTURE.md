@@ -4,7 +4,7 @@
 
 | System | Address | Operating system | Resources | Role |
 |---|---:|---|---|---|
-| ESXi host | `192.168.2.50` | VMware ESXi 8.0.3 | Intel i7-12800H, 32 GB RAM | Type-1 hypervisor and local datastore |
+| ESXi host | `192.168.2.50` | VMware ESXi 8.0.3 | Single-host lab, 32 GB RAM | Type-1 hypervisor and local datastore |
 | LAB-DC01 | `192.168.2.53` | Windows Server 2025 Standard Evaluation | 2 vCPU, 6 GB RAM | AD DS, DNS, Group Policy |
 | LAB-FS01 | `192.168.2.54` | Windows Server 2025 Standard Evaluation | 2 vCPU, 4 GB RAM | SMB, NTFS, ABE, FSRM, backup |
 | LAB-CL01 | `192.168.2.55` | Windows 11 Pro | 2 vCPU, 4 GB RAM | Domain workstation and end-user validation |
