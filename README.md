@@ -16,34 +16,33 @@ ABELLAB is a self-directed infrastructure project that recreates a small enterpr
 
 ## Architecture
 
-### Virtualization topology
+All systems run as virtual machines on a single VMware ESXi 8.0.3 host. The diagrams emphasize the services and trust relationships rather than the underlying consumer hardware.
+
+### Identity and service flow
 
 ```mermaid
-flowchart TB
-    H["Razer Blade 17<br/>VMware ESXi 8.0.3"]
-    W["Windows environment"]
-    L["Linux environment"]
-    DC["LAB-DC01<br/>AD DS · DNS · Group Policy"]
-    FS["LAB-FS01<br/>SMB · FSRM · Backup"]
-    CL["LAB-CL01<br/>Windows 11 domain workstation"]
-    LN["LAB-LNX01<br/>SSSD · Docker · Monitoring"]
+flowchart LR
+    DC["LAB-DC01 · 192.168.2.53<br/>Windows Server 2025<br/>AD DS, DNS, Group Policy"]
+    FS["LAB-FS01 · 192.168.2.54<br/>Windows Server 2025<br/>SMB, FSRM, Server Backup"]
+    CL["LAB-CL01 · 192.168.2.55<br/>Windows 11 Pro<br/>Domain workstation"]
+    LN["LAB-LNX01 · 192.168.2.56<br/>Ubuntu Server 24.04<br/>SSSD, Docker, monitoring"]
 
-    H --> W
-    H --> L
-    W --> DC
-    W --> FS
-    W --> CL
-    L --> LN
+    DC -->|"Identity and DNS"| FS
+    DC -->|"Authentication and policy"| CL
+    DC -->|"Kerberos and SSSD"| LN
+    FS -->|"Department shares"| CL
 ```
 
-### Service relationships
+### Monitoring flow
 
-| Provider | Consumer | Purpose |
-|---|---|---|
-| `LAB-DC01` | `LAB-FS01`, `LAB-CL01`, `LAB-LNX01` | AD identity, DNS, policy, and Kerberos |
-| `LAB-FS01` | `LAB-CL01` | Department SMB shares and access controls |
-| `LAB-LNX01` | `LAB-DC01`, `LAB-FS01` | Prometheus collection through Windows Exporter |
-| `LAB-LNX01` | Administrators | Grafana dashboards and Prometheus alerts |
+```mermaid
+flowchart LR
+    DCX["Windows Exporter<br/>LAB-DC01"] --> P["Prometheus<br/>LAB-LNX01"]
+    FSX["Windows Exporter<br/>LAB-FS01"] --> P
+    NX["Node Exporter<br/>LAB-LNX01"] --> P
+    P --> G["Grafana dashboards"]
+    P --> A["ExporterDown alerts"]
+```
 
 See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for roles, trust boundaries, and service flows.
 
