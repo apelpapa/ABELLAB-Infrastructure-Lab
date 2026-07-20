@@ -1,0 +1,12 @@
+groups:
+  - name: infrastructure-availability
+    rules:
+      - alert: ExporterDown
+        expr: up{job=~"linux-servers|windows-servers"} == 0
+        for: 1m
+        labels:
+          severity: critical
+          environment: ABELLAB
+        annotations:
+          summary: "{{ $labels.server }} monitoring target is down"
+          description: "Prometheus has been unable to scrape {{ $labels.instance }} for more than one minute."

@@ -1,0 +1,33 @@
+name: Validate infrastructure artifacts
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  powershell-syntax:
+    runs-on: windows-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Parse PowerShell files
+        shell: pwsh
+        run: ./tests/Test-PowerShellSyntax.ps1
+
+      - name: Resolve local documentation links
+        shell: pwsh
+        run: ./tests/Test-DocumentationLinks.ps1
+
+  linux-and-monitoring:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Validate Bash, Compose, Prometheus, and alert rules
+        shell: bash
+        run: bash tests/validate.sh

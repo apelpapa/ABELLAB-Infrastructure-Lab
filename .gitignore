@@ -1,0 +1,25 @@
+# Secrets and credentials
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.pfx
+*.p12
+*.kdbx
+secrets/
+credentials/
+
+# Generated evidence and local transcripts
+*.clixml
+*.etl
+*.evtx
+*.log
+transcripts/
+recovery-state/
+
+# Editor and operating-system files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
