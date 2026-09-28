@@ -86,34 +86,9 @@ evidence/screenshots/     Selected outputs captured from the live lab
 .github/workflows/        Syntax and configuration validation for every change
 ```
 
-## Reproduce the monitoring configuration
+## Validation
 
-On an Ubuntu host with Docker Engine and the Compose plugin:
-
-```bash
-cd configs/monitoring
-docker compose config
-docker compose up -d
-docker compose ps
-```
-
-The published ports intentionally bind to the lab monitoring address (`192.168.2.56`) rather than every interface. Change that address for a different environment. Do not expose Grafana, Prometheus, ESXi, RDP, or SSH directly to the public internet.
-
-## Run the static checks
-
-From PowerShell:
-
-```powershell
-pwsh -NoProfile -File tests/Test-PowerShellSyntax.ps1
-```
-
-From Linux or WSL with Docker available:
-
-```bash
-bash tests/validate.sh
-```
-
-The GitHub Actions workflow repeats PowerShell parsing, Bash parsing, Docker Compose rendering, and Prometheus configuration/rule validation.
+The GitHub Actions workflow checks PowerShell and Bash syntax, local documentation links, Docker Compose rendering, and Prometheus configuration and alert rules. The repository includes the validation scripts and captured lab evidence for review.
 
 ## Important limitations
 
